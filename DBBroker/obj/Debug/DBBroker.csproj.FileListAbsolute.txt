@@ -1,0 +1,9 @@
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\DBBroker.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\DBBroker.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\Common.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\Common.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.csproj.AssemblyReference.cache
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.csproj.CoreCompileInputs.cache
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.csproj.CopyComplete
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.pdb

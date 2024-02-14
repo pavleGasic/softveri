@@ -86,8 +86,8 @@ namespace Client.GuiController.ReservationControllers
 
         private void DatePicker_ValueChanged(object sender, EventArgs e)
         {
-            totalPrice = totalPricePerDay * (ucChooseFilm.dateTimePicker1.Value - DateTime.Now).Days;
-            if(totalPrice > 0)
+            totalPrice = totalPricePerDay * (ucChooseFilm.dateTimePicker1.Value.AddHours(1) - DateTime.Now).Days;
+            if (totalPrice >= 0)
             {
                 ucChooseFilm.lblTotal.Text = $"{totalPrice}RSD";
             }
@@ -102,7 +102,10 @@ namespace Client.GuiController.ReservationControllers
         }
         private void InitializeCustomerComboBox()
         {
-            Response response = Communication.Instance.GetCustomers("");
+            Response response = Communication.Instance.GetCustomers(new Customer()
+            {
+                SearchFilter = "%%"
+            });
             if(response.Exception == null && response.Result is List<Customer> customers)
             {
                 ucChooseFilm.cmbCustomers.Items.Clear();
@@ -110,10 +113,14 @@ namespace Client.GuiController.ReservationControllers
                 ucChooseFilm.cmbCustomers.DisplayMember = "FullName";
                 ucChooseFilm.cmbCustomers.SelectedIndex = -1;
             }
+            else
+            {
+                MessageBox.Show("Error when getting customers", "Film error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void GetFilms()
         {
-            Response response = Communication.Instance.GetFilms(ucChooseFilm.txtSearch.Text);
+            Response response = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + ucChooseFilm.txtSearch.Text + '%' });
             oldSearchValue = ucChooseFilm.txtSearch.Text;
             if (response.Exception == null && response.Result is List<Film> films)
             {
@@ -167,9 +174,10 @@ namespace Client.GuiController.ReservationControllers
         {
             Control btnCard = sender as Control;
             UCFilmCard card = btnCard.Parent as UCFilmCard;
+            card = card!=null && btnCard.Parent != null? card : btnCard.Parent.Parent as UCFilmCard;
             if (card != null)
             {
-                if(card.chbAddCard.Checked)
+                if((btnCard is CheckBox && card.chbAddCard.Checked) || ( !(btnCard is CheckBox) && !card.chbAddCard.Checked))
                 {
                     card.chbAddCard.Checked = true;
                     selectedFilms.Add(card.film);
@@ -182,7 +190,7 @@ namespace Client.GuiController.ReservationControllers
                         selectedCards[card.film.FilmId] = true;
                     }
                     totalPricePerDay += card.film.PricePerDay;
-                    totalPrice += card.film.PricePerDay * (ucChooseFilm.dateTimePicker1.Value - DateTime.Now).Days;
+                    totalPrice += card.film.PricePerDay * (ucChooseFilm.dateTimePicker1.Value.AddHours(1) - DateTime.Now).Days;
                 }
                 else
                 {
@@ -197,10 +205,10 @@ namespace Client.GuiController.ReservationControllers
                         selectedCards[card.film.FilmId] = false;
                     }
                     totalPricePerDay -= card.film.PricePerDay;
-                    totalPrice -= card.film.PricePerDay * (ucChooseFilm.dateTimePicker1.Value - DateTime.Now).Days;
+                    totalPrice -= card.film.PricePerDay * (ucChooseFilm.dateTimePicker1.Value.AddHours(1) - DateTime.Now).Days;
                 }
             }
-            if(totalPrice > 0)
+            if (totalPrice >= 0)
             {
                 ucChooseFilm.lblTotal.Text = $"{totalPrice}RSD";
             }

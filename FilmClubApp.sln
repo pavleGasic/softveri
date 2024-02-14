@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBBroker", "DBBroker\DBBrok
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{5F2F01EB-5CE2-4E96-877F-205FC0AE71DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{6B22217B-6BEE-4B47-9D4E-8122813549C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5F2F01EB-5CE2-4E96-877F-205FC0AE71DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2F01EB-5CE2-4E96-877F-205FC0AE71DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2F01EB-5CE2-4E96-877F-205FC0AE71DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B22217B-6BEE-4B47-9D4E-8122813549C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B22217B-6BEE-4B47-9D4E-8122813549C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B22217B-6BEE-4B47-9D4E-8122813549C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B22217B-6BEE-4B47-9D4E-8122813549C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

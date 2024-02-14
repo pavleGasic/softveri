@@ -1,5 +1,4 @@
 ﻿using Common.Domain;
-using DBBroker;
 using Server.SystemOperation;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,6 @@ namespace Server
 
     internal class Controller
     {
-        private Broker broker;
 
         private static Controller instance;
         public static Controller Instance
@@ -25,116 +23,111 @@ namespace Server
             }
         }
 
-        private Controller() { broker = new Broker(); }
+        private Controller() { }
 
         public Worker Login(Worker worker)
         {
-            if(!Session.Instance.ValidateLogin(worker)) return null;
-            LoginSO so = new LoginSO(worker);
-            so.ExecuteTemplate();
-            return so.Result;
+            LoginSO so = new LoginSO();
+            so.ExecuteTemplate(worker);
+            return (Worker)so.Result;
         }
 
         public int Register(Worker worker)
         {
-            if (!Session.Instance.ValidateRegister(worker)) return -1;
-            RegisterSO so = new RegisterSO(worker);
-            so.ExecuteTemplate();
-            return so.Result;
+            RegisterSO so = new RegisterSO();
+            so.ExecuteTemplate(worker);
+            return ((Worker)so.Result).WorkerId;
         }
 
         internal int AddCustomer(Customer customer)
         {
-            if(!Session.Instance.ValidateCustomer(customer)) return -1;
-            AddCustomerSO so = new AddCustomerSO(customer);
-            so.ExecuteTemplate();
-            return so.Result;
+            AddCustomerSO so = new AddCustomerSO();
+            so.ExecuteTemplate(customer);
+            return ((Customer)so.Result).CustomerId;
         }
 
-        internal List<Customer> GetCustomers(string argument)
+        internal List<Customer> GetCustomers(Customer customer)
         {
-            GetCustomersSO so = new GetCustomersSO(argument);
-            so.ExecuteTemplate();
-            return so.Result;
+            GetCustomersSO so = new GetCustomersSO();
+            so.ExecuteTemplate(customer);
+            return (List<Customer>)so.Result;
         }
 
         internal int UpdateCustomer(Customer customer)
         {
-            if(!Session.Instance.ValidateCustomer(customer)) return -1;
-            UpdateCustomerSO so = new UpdateCustomerSO(customer);
-            so.ExecuteTemplate();
-            return so.Result;
+            UpdateCustomerSO so = new UpdateCustomerSO();
+            so.ExecuteTemplate(customer);
+            return ((Customer)so.Result).CustomerId;
         }
 
-        internal object AddActor(Actor actor)
+        internal int AddActor(Actor actor)
         {
-            AddActorSO so = new AddActorSO(actor);
-            so.ExecuteTemplate();
-            return so.Result;
+            AddActorSO so = new AddActorSO();
+            so.ExecuteTemplate(actor);
+            return ((Actor)so.Result).ActorId;
         }
 
-        internal object GetGenres()
+        internal List<Genre> GetGenres()
         {
             GetGenresSO so = new GetGenresSO();
-            so.ExecuteTemplate();
-            return so.Result;
+            so.ExecuteTemplate(new Genre());
+            return (List<Genre>)so.Result;
         }
 
-        internal object GetActors()
+        internal List<Actor> GetActors()
         {
             GetActorsSO so = new GetActorsSO();
-            so.ExecuteTemplate();
-            return so.Result;
+            so.ExecuteTemplate(new Actor());
+            return (List<Actor>)so.Result;
         }
 
-        internal object AddFilm(Film film)
+        internal int AddFilm(Film film)
         {
-            if (!Session.Instance.ValidateFilm(film)) return -1;
-            AddFilmSO so = new AddFilmSO(film);
-            so.ExecuteTemplate();
-            return so.Result;
+            AddFilmSO so = new AddFilmSO();
+            so.ExecuteTemplate(film);
+            return ((Film)so.Result).FilmId;
         }
 
-        internal object GetFilms(string search)
+        internal List<Film> GetFilms(Film film)
         {
-            GetFilmsSO so = new GetFilmsSO(search);
-            so.ExecuteTemplate();
-            return so.Result;
+            GetFilmsSO so = new GetFilmsSO();
+            so.ExecuteTemplate(film);
+            return (List<Film>)so.Result;
         }
 
-        internal object DeleteFilm(Film film)
+        internal int DeleteFilm(Film film)
         {
-            DeleteFilmSO so = new DeleteFilmSO(film);
-            so.ExecuteTemplate();
-            return so.Result;
+            DeleteFilmSO so = new DeleteFilmSO();
+            so.ExecuteTemplate(film);
+            return ((Film)so.Result).FilmId;
         }
 
         internal int AddReservation(Reservation reservation)
         {
-            AddReservation so = new AddReservation(reservation); 
-            so.ExecuteTemplate();
-            return so.Result;
+            AddReservation so = new AddReservation(); 
+            so.ExecuteTemplate(reservation);
+            return ((Reservation)so.Result).ReservationId;
         }
 
-        internal List<Reservation> GetReservations(Worker worker)
+        internal List<Reservation> GetReservations(Reservation reservation)
         {
-            GetReservationsSO so = new GetReservationsSO(worker);
-            so.ExecuteTemplate();
-            return so.Result;
+            GetReservationsSO so = new GetReservationsSO();
+            so.ExecuteTemplate(reservation);
+            return (List<Reservation>)so.Result;
         }
 
         internal int UpdateReservationStatus(Reservation reservation)
         {
-            UpdateReservationStatusSO so = new UpdateReservationStatusSO(reservation);
-            so.ExecuteTemplate();
-            return so.Result;
+            UpdateReservationStatusSO so = new UpdateReservationStatusSO();
+            so.ExecuteTemplate(reservation);
+            return ((Reservation)so.Result).ReservationId;
         }
 
-        internal object DeleteReservation(Reservation reservation)
+        internal Reservation DeleteReservation(Reservation reservation)
         {
-            DeleteReservationSO so = new DeleteReservationSO(reservation);
-            so.ExecuteTemplate();
-            return so.Result;
+            DeleteReservationSO so = new DeleteReservationSO();
+            so.ExecuteTemplate(reservation);
+            return (Reservation)so.Result;
         }
     }
 }

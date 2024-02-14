@@ -14,3 +14,5 @@ C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Server\obj\Debug\Server.csproj.CopyComplete
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Server\bin\Debug\DBBroker.dll
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Server\bin\Debug\DBBroker.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Server\bin\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Server\bin\Debug\Repository.pdb

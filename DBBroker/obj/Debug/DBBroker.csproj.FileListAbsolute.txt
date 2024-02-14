@@ -7,3 +7,7 @@ C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.csproj.CopyComplete
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.dll
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\obj\Debug\DBBroker.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\BouncyCastle.Crypto.xml
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\DBBroker\bin\Debug\Repository.pdb

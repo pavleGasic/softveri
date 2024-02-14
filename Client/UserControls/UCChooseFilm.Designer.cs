@@ -123,11 +123,11 @@
             this.dateTimePicker1.Font = new System.Drawing.Font("Courier New", 13.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePicker1.Location = new System.Drawing.Point(439, 84);
             this.dateTimePicker1.MaxDate = new System.DateTime(2025, 2, 11, 17, 36, 6, 610);
-            this.dateTimePicker1.MinDate = new System.DateTime(2024, 2, 12, 17, 36, 6, 611);
+            this.dateTimePicker1.MinDate = System.DateTime.Now;
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(406, 49);
             this.dateTimePicker1.TabIndex = 35;
-            this.dateTimePicker1.Value = new System.DateTime(2024, 2, 12, 17, 36, 6, 611);
+            this.dateTimePicker1.Value = System.DateTime.Now;
             // 
             // label3
             // 

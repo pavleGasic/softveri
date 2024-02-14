@@ -1,0 +1,6 @@
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\bin\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\bin\Debug\Repository.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\obj\Debug\Repository.csproj.AssemblyReference.cache
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\obj\Debug\Repository.csproj.CoreCompileInputs.cache
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\obj\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Repository\obj\Debug\Repository.pdb

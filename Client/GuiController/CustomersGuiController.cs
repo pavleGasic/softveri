@@ -148,7 +148,7 @@ namespace Client.GuiController
 
         private void RequestForGetCustomers(string search)
         {
-            Response response = Communication.Instance.GetCustomers(search);
+            Response response = Communication.Instance.GetCustomers(new Customer() { SearchFilter = '%' + search + '%'});
             if (response.Exception == null && response.Result is List<Customer>)
             {
                 ucCustomer.dataGridView1.DataSource = null;

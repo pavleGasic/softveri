@@ -4,3 +4,6 @@ C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\obj\Debug\Common.dll
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\obj\Debug\Common.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\bin\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\bin\Debug\Repository.pdb
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Common\obj\Debug\Common.csproj.CopyComplete

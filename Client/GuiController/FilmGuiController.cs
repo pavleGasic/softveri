@@ -39,13 +39,13 @@ namespace Client.GuiController
             panel.Controls.Clear();
             ucFilm.Dock = DockStyle.Fill;
             HandleControls();
-            GetFilms();
+            GetFilms("");
             panel.Controls.Add(ucFilm);
         }
 
-        private void GetFilms()
+        private void GetFilms(string search)
         {
-            Response response = Communication.Instance.GetFilms("");
+            Response response = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + search + '%' });
             if(response.Exception == null && response.Result is List<Film> filmList)
             {
                 ucFilm.dataGridView1.DataSource= filmList;
@@ -76,10 +76,10 @@ namespace Client.GuiController
             {
                 Film selectedFilm = (Film)ucFilm.dataGridView1.SelectedRows[0].DataBoundItem;
                 Response response = Communication.Instance.DeleteFilm(selectedFilm);
-                if(response.Exception == null || (int)response.Result != -1)
+                if(response.Exception == null && (int)response.Result != -1)
                 {
                     MessageBox.Show("Film deleted successfully", "Film delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    GetFilms();
+                    GetFilms("");
                 }
                 else
                 {
@@ -108,9 +108,9 @@ namespace Client.GuiController
 
         private void PrizeChanged_TextChanged(object sender, EventArgs e)
         {
-            if(!ucAddFilm.txtPrizePerDay.Text.Contains(" RSD"))
+            if(!ucAddFilm.txtPrizePerDay.Text.Contains("RSD"))
             {
-                ucAddFilm.txtPrizePerDay.Text += " RSD";
+                ucAddFilm.txtPrizePerDay.Text += "RSD";
             }
         }
 
@@ -192,7 +192,7 @@ namespace Client.GuiController
                 }
                 else
                 {
-                    MessageBox.Show("Adding customer failed", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Adding actor failed", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -281,7 +281,7 @@ namespace Client.GuiController
                         ucAddFilm.numUDQuantity.Value = 0;
                         ucAddFilm.cmbGenre.SelectedIndex = -1;
                         assignedActors.Clear();
-                        GetFilms();
+                        GetFilms("");
                     }
                 }
                 else

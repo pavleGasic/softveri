@@ -32,3 +32,5 @@ C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Client\obj\Debug\Client.UserControls.UCUpdateReservation.resources
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Client\obj\Debug\Client.UserControls.UCReservationViewCard.resources
 C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Client\obj\Debug\Client.UserControls.UCViewReservation.resources
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Client\bin\Debug\Repository.dll
+C:\Users\pavle\Documents\Факс2023\ProjektovanjeSoftvera\Seminarski\FilmClub\Client\bin\Debug\Repository.pdb

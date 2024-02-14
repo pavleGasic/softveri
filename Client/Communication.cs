@@ -74,11 +74,11 @@ namespace Client
             return (Response)receiver.Receive();
         }
 
-        internal Response GetCustomers(string search)
+        internal Response GetCustomers(Customer customer)
         {
             Request req = new Request()
             {
-                Argument = search,
+                Argument = customer,
                 Username = Session.Instance.Worker.Username,
                 Operation = Operation.GetCustomers
             };
@@ -144,11 +144,11 @@ namespace Client
             return (Response)receiver.Receive();
         }
 
-        internal Response GetFilms(string search)
+        internal Response GetFilms(Film film)
         {
             Request req = new Request()
             {
-                Argument = search,
+                Argument = film,
                 Username = Session.Instance.Worker.Username,
                 Operation = Operation.GetFilms
             };
@@ -184,7 +184,7 @@ namespace Client
         {
             Request req = new Request()
             {
-                Argument = Session.Instance.Worker,
+                Argument = new Reservation() { Worker = Session.Instance.Worker },
                 Username = Session.Instance.Worker.Username,
                 Operation = Operation.GetReservations
             };

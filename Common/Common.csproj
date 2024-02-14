@@ -49,6 +49,7 @@
     <Compile Include="Domain\Actor.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Film.cs" />
+    <Compile Include="Domain\FilmRole.cs" />
     <Compile Include="Domain\Gender.cs" />
     <Compile Include="Domain\Genre.cs" />
     <Compile Include="Domain\Reservation.cs" />
@@ -57,6 +58,11 @@
     <Compile Include="Domain\Worker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{6B22217B-6BEE-4B47-9D4E-8122813549C0}</Project>
+      <Name>Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

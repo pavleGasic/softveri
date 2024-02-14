@@ -58,23 +58,28 @@
     <Compile Include="ServerLogic.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Session.cs" />
-    <Compile Include="SystemOperation\AddActorSO.cs" />
-    <Compile Include="SystemOperation\AddCustomerSO.cs" />
-    <Compile Include="SystemOperation\AddFilmSO.cs" />
-    <Compile Include="SystemOperation\AddReservation.cs" />
-    <Compile Include="SystemOperation\DeleteFilmSO.cs" />
-    <Compile Include="SystemOperation\DeleteReservationSO.cs" />
-    <Compile Include="SystemOperation\GetActorsSO.cs" />
-    <Compile Include="SystemOperation\GetFilmsSO.cs" />
-    <Compile Include="SystemOperation\GetGenresSO.cs" />
-    <Compile Include="SystemOperation\GetCustomersSO.cs" />
-    <Compile Include="SystemOperation\GetReservationsSO.cs" />
-    <Compile Include="SystemOperation\LoginSO.cs" />
-    <Compile Include="SystemOperation\RegisterSO.cs" />
+    <Compile Include="SystemOperation\ActorSO\AddActorSO.cs" />
+    <Compile Include="SystemOperation\CustomerSO\AddCustomerSO.cs" />
+    <Compile Include="SystemOperation\Exceptions\ActorException.cs" />
+    <Compile Include="SystemOperation\Exceptions\CustomerException.cs" />
+    <Compile Include="SystemOperation\Exceptions\FilmException.cs" />
+    <Compile Include="SystemOperation\Exceptions\ReservationException.cs" />
+    <Compile Include="SystemOperation\Exceptions\WorkerException.cs" />
+    <Compile Include="SystemOperation\FIlmSO\AddFilmSO.cs" />
+    <Compile Include="SystemOperation\ReservationSO\AddReservation.cs" />
+    <Compile Include="SystemOperation\FIlmSO\DeleteFilmSO.cs" />
+    <Compile Include="SystemOperation\ReservationSO\DeleteReservationSO.cs" />
+    <Compile Include="SystemOperation\ActorSO\GetActorsSO.cs" />
+    <Compile Include="SystemOperation\FIlmSO\GetFilmsSO.cs" />
+    <Compile Include="SystemOperation\GenreSO\GetGenresSO.cs" />
+    <Compile Include="SystemOperation\CustomerSO\GetCustomersSO.cs" />
+    <Compile Include="SystemOperation\ReservationSO\GetReservationsSO.cs" />
+    <Compile Include="SystemOperation\ValidationHelper.cs" />
+    <Compile Include="SystemOperation\WorkerSO\LoginSO.cs" />
+    <Compile Include="SystemOperation\WorkerSO\RegisterSO.cs" />
     <Compile Include="SystemOperation\SystemOperationBase.cs" />
-    <Compile Include="SystemOperation\UpdateCustomerSO.cs" />
-    <Compile Include="SystemOperation\UpdateReservationStatusSO.cs" />
+    <Compile Include="SystemOperation\CustomerSO\UpdateCustomerSO.cs" />
+    <Compile Include="SystemOperation\ReservationSO\UpdateReservationStatusSO.cs" />
     <Compile Include="UserControls\UCWindowTop.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -142,6 +147,10 @@
     <ProjectReference Include="..\DBBroker\DBBroker.csproj">
       <Project>{7BBC9054-7EFA-4297-8552-6BB5D2F0F8BB}</Project>
       <Name>DBBroker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{6B22217B-6BEE-4B47-9D4E-8122813549C0}</Project>
+      <Name>Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -73,7 +73,7 @@ namespace Server
                         if ((int)res.Result == -1) res.Exception = new Exception();
                         break;
                     case Operation.GetCustomers:
-                        res.Result = Controller.Instance.GetCustomers((string)req.Argument);
+                        res.Result = Controller.Instance.GetCustomers((Customer)req.Argument);
                         break;
                     case Operation.UpdateCustomer:
                         res.Result = Controller.Instance.UpdateCustomer((Customer)req.Argument);
@@ -94,7 +94,7 @@ namespace Server
                         if ((int)res.Result == -1) res.Exception = new Exception();
                         break;
                     case Operation.GetFilms:
-                        res.Result = Controller.Instance.GetFilms((string)req.Argument);
+                        res.Result = Controller.Instance.GetFilms((Film)req.Argument);
                         break;
                     case Operation.DeleteFilm:
                         res.Result = Controller.Instance.DeleteFilm((Film)req.Argument);
@@ -102,10 +102,9 @@ namespace Server
                         break;
                     case Operation.AddReservation:
                         res.Result = Controller.Instance.AddReservation((Reservation)req.Argument);
-                        if ((int)res.Result == -1) res.Exception = new Exception();
                         break;
                     case Operation.GetReservations:
-                        res.Result = Controller.Instance.GetReservations((Worker)req.Argument);
+                        res.Result = Controller.Instance.GetReservations((Reservation)req.Argument);
                         break;
                     case Operation.UpdateReservationStatus:
                         res.Result = Controller.Instance.UpdateReservationStatus((Reservation)req.Argument);
@@ -113,7 +112,6 @@ namespace Server
                         break;
                     case Operation.DeleteReservation:
                         res.Result = Controller.Instance.DeleteReservation((Reservation)req.Argument);
-                        if ((int)res.Result == -1) res.Exception = new Exception();
                         break;
                 }
             }

@@ -14,8 +14,16 @@ namespace Server.SystemOperation
     {
         protected override void ExecuteConcreteOperation(IEntity entity)
         {
-            Actor actor = (Actor)entity;
-            Result = genericRepository.GetAll(actor).Cast<Actor>().ToList();
+            try
+            {
+                Actor actor = (Actor)entity;
+                Result = genericRepository.GetAll(actor).Cast<Actor>().ToList();
+            }
+            catch
+            {
+                throw new Exception("System cannot get actors!");
+
+            }
         }
     }
 }

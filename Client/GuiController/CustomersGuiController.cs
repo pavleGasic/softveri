@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -69,31 +70,28 @@ namespace Client.GuiController
 
         private void UpdateCustomerDialog_Click(object sender, EventArgs e)
         {
-            if (!GuiHelper.ValidateAddCustomer(ucUpdateCustomer.txtFirstName.Text, ucUpdateCustomer.txtLastName.Text, ucUpdateCustomer.txtEmail.Text))
+            string errorMessage = GuiHelper.ValidateAddCustomer(ucUpdateCustomer.txtFirstName.Text, ucUpdateCustomer.txtLastName.Text, ucUpdateCustomer.txtEmail.Text);
+            if (errorMessage != string.Empty)
             {
-                ucUpdateCustomer.txtEmail.Text = selectedCustomer.Email;
-                ucUpdateCustomer.txtFirstName.Text = selectedCustomer.FirstName;
-                ucUpdateCustomer.txtLastName.Text = selectedCustomer.LastName;
-                ucUpdateCustomer.lblErrorUpdateCustomer.Text = "Invalid values in fields";
+                ucUpdateCustomer.txtEmail.Text = string.Empty;
+                ucUpdateCustomer.txtFirstName.Text = string.Empty;
+                ucUpdateCustomer.txtLastName.Text = string.Empty;
+                MessageBox.Show(errorMessage, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                selectedCustomer.FirstName = ucUpdateCustomer.txtFirstName.Text;
-                selectedCustomer.LastName = ucUpdateCustomer.txtLastName.Text;
-                selectedCustomer.Email = ucUpdateCustomer.txtEmail.Text;
-                Response response = Communication.Instance.EditCustomer(selectedCustomer);
-                if (response.Exception == null)
+                try
                 {
-                    if (MessageBox.Show("Customer added successfully", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                    {
-                        RequestForGetCustomers(string.Empty);
-                        ucCustomer.txtSearch.Text = string.Empty;
-                        frmDialog.Close();
-                    }
+                    selectedCustomer.FirstName = ucUpdateCustomer.txtFirstName.Text;
+                    selectedCustomer.LastName = ucUpdateCustomer.txtLastName.Text;
+                    selectedCustomer.Email = ucUpdateCustomer.txtEmail.Text;
+                    Customer response = Communication.Instance.UpdateCustomer(selectedCustomer);
+                    RequestForGetCustomers(string.Empty);
+                    ucCustomer.txtSearch.Text = string.Empty;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Adding customer failed", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Update customer error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -110,12 +108,13 @@ namespace Client.GuiController
        
         private void AddCustomerDialog_Click(object sender, EventArgs e)
         {
-            if(!GuiHelper.ValidateAddCustomer(ucAddCustomer.txtFirstName.Text, ucAddCustomer.txtLastName.Text, ucAddCustomer.txtEmail.Text))
+            string errorMessage = GuiHelper.ValidateAddCustomer(ucAddCustomer.txtFirstName.Text, ucAddCustomer.txtLastName.Text, ucAddCustomer.txtEmail.Text);
+            if ( errorMessage != string.Empty )
             {
                 ucAddCustomer.txtEmail.Text = string.Empty;
                 ucAddCustomer.txtFirstName.Text = string.Empty;
                 ucAddCustomer.txtLastName.Text = string.Empty;
-                ucAddCustomer.lblErrorAddCustomer.Text = "Invalid values in fields";
+                MessageBox.Show(errorMessage, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -125,19 +124,15 @@ namespace Client.GuiController
                     FirstName = ucAddCustomer.txtFirstName.Text,
                     LastName = ucAddCustomer.txtLastName.Text,
                 };
-                Response response = Communication.Instance.AddCustomer(customer);
-                if(response.Exception == null)
+                try
                 {
-                    if(MessageBox.Show("Customer added successfully", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                    {
-                        RequestForGetCustomers(string.Empty);
-                        ucCustomer.txtSearch.Text = string.Empty;
-                        frmDialog.Close();
-                    }
+                    Customer response = Communication.Instance.AddCustomer(customer);
+                    RequestForGetCustomers(string.Empty);
+                    ucCustomer.txtSearch.Text = string.Empty;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Adding customer failed", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Add customer error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -148,12 +143,12 @@ namespace Client.GuiController
 
         private void RequestForGetCustomers(string search)
         {
-            Response response = Communication.Instance.GetCustomers(new Customer() { SearchFilter = '%' + search + '%'});
-            if (response.Exception == null && response.Result is List<Customer>)
+            try
             {
+                List<Customer> response = Communication.Instance.GetCustomers(new Customer() { SearchFilter = '%' + search + '%' });
                 ucCustomer.dataGridView1.DataSource = null;
-                ucCustomer.dataGridView1.DataSource = (List<Customer>)response.Result;
-                ucCustomer.dataGridView1.Columns["customerid"].Visible = false;
+                ucCustomer.dataGridView1.DataSource = (List<Customer>)response;
+                ucCustomer.dataGridView1.Columns["customerId"].Visible = false;
                 ucCustomer.dataGridView1.Columns["FullName"].Visible = false;
                 ucCustomer.dataGridView1.Columns["FirstName"].HeaderText = "First name";
                 ucCustomer.dataGridView1.Columns["LastName"].HeaderText = "Last name";
@@ -162,12 +157,10 @@ namespace Client.GuiController
                     column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Getting customer failed", "Get customers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get customers error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }

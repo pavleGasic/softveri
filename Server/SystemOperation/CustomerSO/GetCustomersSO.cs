@@ -12,9 +12,15 @@ namespace Server.SystemOperation
     {
         protected override void ExecuteConcreteOperation(IEntity entity)
         {
-            Customer actor = (Customer)entity;
-            Result = genericRepository.Find(actor, "CONCAT(FirstName, ' ', LastName) LIKE @SearchFilter ").Cast<Customer>().ToList();
+            try
+            {
+                Customer actor = (Customer)entity;
+                Result = genericRepository.Find(actor, "CONCAT(FirstName, ' ', LastName) LIKE @SearchFilter ").Cast<Customer>().ToList();
+            }catch 
+            {
+                throw new Exception("System cannot get customers!");
 
+            }
         }
     }
 }

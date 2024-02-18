@@ -75,5 +75,10 @@ namespace Common.Domain
                 return sb.ToString();
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Worker worker && worker.Username == Username;
+        }
     }
 }

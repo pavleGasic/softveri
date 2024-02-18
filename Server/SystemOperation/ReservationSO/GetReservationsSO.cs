@@ -13,8 +13,15 @@ namespace Server.SystemOperation
     {
         protected override void ExecuteConcreteOperation(IEntity entity)
         {
-            Reservation reservation = (Reservation)entity;
-            Result = genericRepository.Find(reservation, " r.WorkerId = @WorkerId ").Cast<Reservation>().ToList();
+            try
+            {
+                Reservation reservation = (Reservation)entity;
+                Result = genericRepository.Find(reservation, " r.WorkerId = @WorkerId ").Cast<Reservation>().ToList();
+            }
+            catch
+            {
+                throw new Exception("System cannot get reservations!");
+            }
         }
     }
 }

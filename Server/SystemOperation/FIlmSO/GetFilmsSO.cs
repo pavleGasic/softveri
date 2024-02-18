@@ -13,8 +13,15 @@ namespace Server.SystemOperation
     {
         protected override void ExecuteConcreteOperation(IEntity entity)
         {
-            Film film = (Film)entity;
-            Result = genericRepository.Find(film, "f.Title LIKE @SearchFilter ").Cast<Film>().ToList();
+            try
+            {
+                Film film = (Film)entity;
+                Result = genericRepository.Find(film, "f.Title LIKE @SearchFilter ").Cast<Film>().ToList();
+            }
+            catch 
+            {
+                throw new Exception("System cannot get films!");
+            }
         }
     }
 }

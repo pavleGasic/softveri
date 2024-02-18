@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -102,33 +103,30 @@ namespace Client.GuiController.ReservationControllers
         }
         private void InitializeCustomerComboBox()
         {
-            Response response = Communication.Instance.GetCustomers(new Customer()
+            try
             {
-                SearchFilter = "%%"
-            });
-            if(response.Exception == null && response.Result is List<Customer> customers)
-            {
+                List<Customer> customers = Communication.Instance.GetCustomers(new Customer() { SearchFilter = "%%" });
                 ucChooseFilm.cmbCustomers.Items.Clear();
                 ucChooseFilm.cmbCustomers.DataSource = customers;
                 ucChooseFilm.cmbCustomers.DisplayMember = "FullName";
                 ucChooseFilm.cmbCustomers.SelectedIndex = -1;
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error when getting customers", "Film error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get customers error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void GetFilms()
         {
-            Response response = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + ucChooseFilm.txtSearch.Text + '%' });
-            oldSearchValue = ucChooseFilm.txtSearch.Text;
-            if (response.Exception == null && response.Result is List<Film> films)
+            try
             {
+                List<Film> films = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + ucChooseFilm.txtSearch.Text + '%' });
+                oldSearchValue = ucChooseFilm.txtSearch.Text;
                 ucChooseFilm.flowLayoutPanel1.Controls.Clear();
-                foreach(var f in films)
+                foreach (var f in films)
                 {
                     UCFilmCard card = new UCFilmCard();
-                    if(selectedCards.ContainsKey(f.FilmId))
+                    if (selectedCards.ContainsKey(f.FilmId))
                     {
                         card.chbAddCard.Checked = selectedCards[f.FilmId];
                     }
@@ -137,7 +135,7 @@ namespace Client.GuiController.ReservationControllers
                     card.lblPrice.Text = f.PricePerDay.ToString();
                     card.lblQuantity.Text = f.Quantity.ToString();
                     card.pictureBox1.LoadAsync(f.ImageUrl);
-                    if(f.Quantity == 0)
+                    if (f.Quantity == 0)
                     {
                         card.chbAddCard.Enabled = false;
                     }
@@ -157,16 +155,16 @@ namespace Client.GuiController.ReservationControllers
                         card.lblTitle.Click += ChooseFilm_Click;
                         card.chbAddCard.Click += ChooseFilm_Click;
                     }
-                    f.Actors.ForEach( a =>
+                    f.Actors.ForEach(a =>
                     {
                         card.lbxCast.Items.Add(a.Name + " -> " + a.RoleName);
                     });
                     ucChooseFilm.flowLayoutPanel1.Controls.Add(card);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error when getting films", "Film error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get films error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -15,8 +15,10 @@ namespace Common.Domain
         public int ActorId { get; set; }
         [IncludeInParameters("Insert")]
         public string Name { get; set; }
-        [IncludeInParameters("Insert")]
         public Gender? Gender { get; set; }
+        [IncludeInParameters("Insert")]
+        [Browsable(false)]
+        public string GenderString => Gender?.ToString()??"None";
         public string RoleName { get; set; }
         [Browsable(false)]
         public string TableName => "Actor";
@@ -25,7 +27,7 @@ namespace Common.Domain
         [Browsable(false)]
         public string TableAlias => "a";
         [Browsable(false)]
-        public string InsertValues => "@Name, @Gender";
+        public string InsertValues => "@Name, @GenderString";
         [Browsable(false)]
         public string SelectValues => "*";
         [Browsable(false)]

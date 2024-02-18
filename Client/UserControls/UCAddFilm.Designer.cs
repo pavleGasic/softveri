@@ -188,9 +188,9 @@
             this.label6.Font = new System.Drawing.Font("Courier New", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(249, 468);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(236, 33);
+            this.label6.Size = new System.Drawing.Size(372, 33);
             this.label6.TabIndex = 46;
-            this.label6.Text = "Prize per day";
+            this.label6.Text = "Prize per day(in RSD)";
             // 
             // UCAddFilm
             // 

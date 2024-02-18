@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -37,9 +38,9 @@ namespace Client.GuiController.ReservationControllers
 
         private void GetReservations()
         {
-            Response response = Communication.Instance.GetReservations();
-            if (response.Exception == null && response.Result is List<Reservation> reservations)
+            try
             {
+                List<Reservation> reservations = Communication.Instance.GetReservations();
                 ucReservation.dataGridView1.DataSource = null;
                 ucReservation.dataGridView1.DataSource = reservations;
                 ucReservation.dataGridView1.Columns["reservationId"].HeaderText = "Reservation no";
@@ -53,11 +54,11 @@ namespace Client.GuiController.ReservationControllers
                 foreach (DataGridViewColumn column in ucReservation.dataGridView1.Columns)
                 {
                     column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }       
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error when getting reservations", "Reservation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get reservations error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -102,33 +103,32 @@ namespace Client.GuiController.ReservationControllers
 
         private void DeleteReservation_Click(object sender, EventArgs e)
         {
-            if (ucReservation.dataGridView1.SelectedRows.Count == 1)
+            try
             {
-                Reservation selectedReservation = (Reservation)ucReservation.dataGridView1.SelectedRows[0].DataBoundItem;
-                if(selectedReservation.ReservationStatus != ReservationStatus.Returned)
+                if (ucReservation.dataGridView1.SelectedRows.Count == 1)
                 {
-                    MessageBox.Show("Cannon delete reservation that is not returned", "Reservation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    if (MessageBox.Show($"Do you want to delete reservation number {selectedReservation.ReservationId}?", "Delete reservation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    Reservation selectedReservation = (Reservation)ucReservation.dataGridView1.SelectedRows[0].DataBoundItem;
+                    if (selectedReservation.ReservationStatus != ReservationStatus.Returned)
                     {
-                        Response response = Communication.Instance.DeleteReservation(selectedReservation);
-                        if (response.Exception == null && response.Result is int)
+                        MessageBox.Show("Cannon delete reservation that is not returned", "Reservation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        if (MessageBox.Show($"Do you want to delete reservation number {selectedReservation.ReservationId}?", "Delete reservation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            MessageBox.Show("Delete reservation successful", "Reservation delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Reservation reservation = Communication.Instance.DeleteReservation(selectedReservation);
                             GetReservations();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Delete reservation failed", "Reservation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
+                else
+                {
+                    MessageBox.Show("You must select row first", "Invalid operation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Select reservation first", "Reservation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Delete reservations error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

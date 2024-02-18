@@ -16,6 +16,7 @@ namespace Server.SystemOperation
             try
             {
                 Customer customer = (Customer)entity;
+                ValidationHelper.ValidateCustomer(customer);
                 genericRepository.Update(customer);
                 Result = entity;
             }

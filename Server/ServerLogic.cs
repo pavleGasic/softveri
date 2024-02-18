@@ -16,7 +16,6 @@ namespace Server
     internal class ServerLogic
     {
         private Socket connectionSocket;
-        internal BindingList<ClientHandler> handlers = new BindingList<ClientHandler>();
         private FrmServer frmServer;
         public ServerLogic(FrmServer frmServer) { 
             this.frmServer = frmServer;
@@ -41,7 +40,6 @@ namespace Server
                 {
                     Socket clientSocket = connectionSocket.Accept();
                     ClientHandler handler = new ClientHandler(clientSocket, frmServer);
-                    handlers.Add(handler);
                     Thread clientThread = new Thread(handler.HandleRequest);
                     clientThread.Start();
                 }
@@ -54,7 +52,11 @@ namespace Server
         public void Stop()
         {
             connectionSocket.Close();
-            handlers.Clear();
+            foreach(var handler in Session.clientHandlers)
+            {
+                handler.Stop();
+            }
+            Session.clientHandlers.Clear();
         }
     }
 }

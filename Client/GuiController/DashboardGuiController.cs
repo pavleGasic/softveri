@@ -1,4 +1,5 @@
-﻿using Client.GuiController.ReservationControllers;
+﻿using Client.ClientCommunication;
+using Client.GuiController.ReservationControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,7 @@ namespace Client.GuiController
 
         private void SignOut_Click(object sender, EventArgs e)
         {
+            Communication.Instance.Logout();
             LoginGuiController.Instance.FromMakeVisible();
             Session.Instance.Worker = null;
             frmDashboard.Close();

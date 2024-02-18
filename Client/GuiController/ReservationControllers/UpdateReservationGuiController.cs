@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -40,17 +41,17 @@ namespace Client.GuiController.ReservationControllers
 
         private void BtnUpdateReservation_Click(object sender, EventArgs e)
         {
-            reservation.ReservationStatus = (ReservationStatus)ucUpdateReservation.cmbStatus.SelectedItem;
-            Response response = Communication.Instance.UpdateReservationStatus(reservation);
-            if(response.Exception == null && response.Result is int)
+
+            try
             {
-                MessageBox.Show("Reservation status updated successfully", "Update success",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                reservation.ReservationStatus = (ReservationStatus)ucUpdateReservation.cmbStatus.SelectedItem;
+                Reservation response = Communication.Instance.UpdateReservationStatus(reservation);
                 ReservationGuiController.Instance.refreshReservation = true;
                 frmDialog.Close();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Reservation status update failed", "Update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Update reservation error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

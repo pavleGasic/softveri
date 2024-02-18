@@ -19,7 +19,7 @@ namespace Server.SystemOperation
             }
             catch 
             {
-                throw new Exception("Wrong credentials! Login error.");
+                throw new Exception("Server side login error.");
             }
         }
     }

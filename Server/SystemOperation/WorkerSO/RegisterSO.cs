@@ -15,13 +15,20 @@ namespace Server.SystemOperation
             try
             {
                 Worker worker = (Worker)entity;
-                ValidationHelper.ValidateLogin(worker);
+                ValidationHelper.ValidateRegister(worker);
                 genericRepository.Add(worker);
                 Result = worker;
             }
-            catch
+            catch(Exception ex) 
             {
-                throw new Exception("System cannot create new worker!");
+                if(ex.Message.Contains("Cannot insert duplicate key row in object 'dbo.Worker' with unique index"))
+                {
+                    throw new Exception("There is more accounts with this username, please change it and try again!");
+                }
+                else
+                {
+                    throw new Exception("System cannot create new worker!");
+                }
             }
         }
     }

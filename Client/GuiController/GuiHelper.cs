@@ -30,29 +30,59 @@ namespace Client.GuiController
             return false;
         }
 
-        public static bool ValidateAddCustomer(string firstName, string lastName, string email)
+        public static string ValidateAddCustomer(string firstName, string lastName, string email)
         {
+            string errorMessage = string.Empty;
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             Regex regex = new Regex(pattern);
             if (!regex.IsMatch(email))
             {
-                return false;
+                errorMessage += "Email must be in valid format(ex. pavle@gmail.com)\n";
             }
-            else
+
+            if (firstName.Length < 2 || lastName.Length < 2)
             {
-                if (firstName.Length < 2 || lastName.Length < 2)
-                {
-                    return false;
-                }
-                return true;
+                errorMessage += "First name and last name must be longer than one characters";
             }
+            return errorMessage;
         }
 
         public static double GetDoubleValue(string value)
         {
-            string doubleValue = value.Trim().Replace(',', '.').Replace(" RSD", "");
+            string doubleValue = value.Trim().Replace(',', '.');
             bool success = double.TryParse(doubleValue, out double returnValue);
             return success ? returnValue : -1;
+        }
+
+        internal static string ValidateAddActor(string actorName)
+        {
+            if(actorName == null || actorName.Length < 2 || !actorName.Contains(' '))
+            {
+                return "Enter actor full name, with space between first and last name!";
+            }
+            return string.Empty;
+        }
+
+        internal static string ValidateFilm(Film film)
+        {
+            string errorMessage = string.Empty;
+            if (film.Title == null || film.Title.Length == 0)
+            {
+                errorMessage += "Film title is empty!\n";
+            }
+            if(film.Genre == null)
+            {
+                errorMessage += "Film genre isn't selected!\n";
+            }
+            if(film.PricePerDay == -1)
+            {
+                errorMessage += "Film price isn't numeric value!\n";
+            }
+            if(film.Actors.Count == 0)
+            {
+                errorMessage += "Film don't have actors!\n";
+            }
+            return errorMessage;
         }
     }
 }

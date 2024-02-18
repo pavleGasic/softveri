@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -45,19 +46,19 @@ namespace Client.GuiController
 
         private void GetFilms(string search)
         {
-            Response response = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + search + '%' });
-            if(response.Exception == null && response.Result is List<Film> filmList)
+            try
             {
-                ucFilm.dataGridView1.DataSource= filmList;
+                List<Film> filmList = Communication.Instance.GetFilms(new Film() { SearchFilter = '%' + search + '%' });
+                ucFilm.dataGridView1.DataSource = filmList;
                 ucFilm.dataGridView1.Columns["filmId"].Visible = false;
                 ucFilm.dataGridView1.Columns["imageUrl"].Visible = false;
                 ucFilm.dataGridView1.Columns["genre"].Visible = false;
                 ucFilm.dataGridView1.Columns["priceperday"].HeaderText = "Price(RSD/day)";
                 MakeDataGridViewAutoSizeColumns(ucFilm.dataGridView1);
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Database error getting films", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get films error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -72,23 +73,22 @@ namespace Client.GuiController
         #region Creating dialogs
         private void DeleteFilm_Click(object sender, EventArgs e)
         {
-            if (ucFilm.dataGridView1.SelectedRows.Count == 1)
+            try
             {
-                Film selectedFilm = (Film)ucFilm.dataGridView1.SelectedRows[0].DataBoundItem;
-                Response response = Communication.Instance.DeleteFilm(selectedFilm);
-                if(response.Exception == null && (int)response.Result != -1)
+                if (ucFilm.dataGridView1.SelectedRows.Count == 1)
                 {
-                    MessageBox.Show("Film deleted successfully", "Film delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Film selectedFilm = (Film)ucFilm.dataGridView1.SelectedRows[0].DataBoundItem;
+                    Film response = Communication.Instance.DeleteFilm(selectedFilm);
                     GetFilms("");
                 }
                 else
                 {
-                    MessageBox.Show("Film delete failed", "Film delete", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("You must select row first", "Invalid operation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("You must select row first", "Invalid operation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Get genres error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -101,36 +101,24 @@ namespace Client.GuiController
             ucAddFilm.Dock = DockStyle.Fill;
             ucAddFilm.btnSave.Click += SaveFilm_Click;
             ucAddFilm.btnAddActors.Click += AssignActorsForm_Click;
-            ucAddFilm.txtPrizePerDay.TextChanged += PrizeChanged_TextChanged;
             FillGenreComboBox();
             frmAddFilmDialog.ShowDialog();
         }
 
-        private void PrizeChanged_TextChanged(object sender, EventArgs e)
-        {
-            if(!ucAddFilm.txtPrizePerDay.Text.Contains("RSD"))
-            {
-                ucAddFilm.txtPrizePerDay.Text += "RSD";
-            }
-        }
-
         private void FillGenreComboBox()
         {
-            Response response = Communication.Instance.GetGenres();
-            if(response.Exception == null && response.Result != null && response.Result is List<Genre> genres)
+            try
             {
+                List<Genre> genres = Communication.Instance.GetGenres();
+
                 ucAddFilm.cmbGenre.DataSource = genres;
                 ucAddFilm.cmbGenre.DisplayMember = "GenreName";
                 ucAddFilm.cmbGenre.ValueMember = "GenreId";
             }
-            else
+            catch (Exception ex)
             {
-                if(MessageBox.Show("Cannot get genres", "Get genres", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
-                {
-                    frmAddFilmDialog.Close();
-                }
+                MessageBox.Show(ex.Message, "Get genres error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void AddActor_Click(object sender, EventArgs e)
@@ -165,12 +153,13 @@ namespace Client.GuiController
 
         private void AddActorDialog_Click(object sender, EventArgs e)
         {
-            if (ucAddActor.txtName.Text.Length < 3)
+            string errorMessage = GuiHelper.ValidateAddActor(ucAddActor.txtName.Text);
+            if (errorMessage != string.Empty)
             {
                 ucAddActor.txtName.Text = string.Empty;
                 ucAddActor.chbFemale.Checked = false;
                 ucAddActor.chbFemale.Checked = false;
-                ucAddActor.lblErrorAddActor.Text = "Invalid values in fields";
+                MessageBox.Show(errorMessage, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -182,17 +171,16 @@ namespace Client.GuiController
                     Name = ucAddActor.txtName.Text,
                     Gender = gender
                 };
-                Response response = Communication.Instance.AddActor(actor);
-                if (response.Exception == null)
+                try
                 {
-                    if (MessageBox.Show("Actor added successfully", "Actor add", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                    {
-                        frmAddActorDialog.Close();
-                    }
+                    Actor response = Communication.Instance.AddActor(actor);
+                    ucAddActor.chbFemale.Checked = false;
+                    ucAddActor.chbMale.Checked = false;
+                    ucAddActor.txtName.Text = string.Empty;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Adding actor failed", "Customer add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Add customer error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -234,64 +222,54 @@ namespace Client.GuiController
 
         private void FillActorsComboBox()
         {
-            Response response = Communication.Instance.GetActors();
-            if (response.Exception == null && response.Result != null && response.Result is List<Actor> actors)
+            try
             {
+                List<Actor> actors = Communication.Instance.GetActors();
+
                 ucAssignActorsToFilm.cmbActor.DataSource = actors;
                 ucAssignActorsToFilm.cmbActor.DisplayMember = "Name";
                 ucAssignActorsToFilm.cmbActor.ValueMember = "ActorId";
             }
-            else
+            catch (Exception ex)
             {
-                if (MessageBox.Show("Cannot get actors", "Get actors", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
-                {
-                    frmAssignActorDialog.Close();
-                }
+                MessageBox.Show(ex.Message, "Get actors error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SaveFilm_Click(object sender, EventArgs e)
         {
-            if(ucAddFilm.txtTitle.Text.Length > 0 && ucAddFilm.cmbGenre.SelectedIndex != -1
-                && GuiHelper.GetDoubleValue(ucAddFilm.txtPrizePerDay.Text) != -1)
+            Film film = new Film()
             {
-                if(assignedActors.Count == 0)
+                Genre = ucAddFilm.cmbGenre.SelectedItem as Genre,
+                ImageUrl = ucAddFilm.txtImageUrl.Text,
+                Title = ucAddFilm.txtTitle.Text,
+                Quantity = (int)ucAddFilm.numUDQuantity.Value,
+                Actors = new List<Actor>(assignedActors),
+                PricePerDay = GuiHelper.GetDoubleValue(ucAddFilm.txtPrizePerDay.Text)
+            };
+            string errorMessage = GuiHelper.ValidateFilm(film);
+
+            if (errorMessage == string.Empty)
+            {
+                try
                 {
-                    if(MessageBox.Show("Are you sure that you don't want to assign actor to this film?", "Assign actors", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
-                    {
-                        return;
-                    }
+                    Film response = Communication.Instance.AddFilm(film);
+                    ucAddFilm.txtTitle.Text = string.Empty;
+                    ucAddFilm.txtImageUrl.Text = string.Empty;
+                    ucAddFilm.txtPrizePerDay.Text = string.Empty;
+                    ucAddFilm.numUDQuantity.Value = 0;
+                    ucAddFilm.cmbGenre.SelectedIndex = -1;
+                    assignedActors.Clear();
+                    GetFilms("");
                 }
-                Film film = new Film()
+                catch (Exception ex)
                 {
-                    Genre = (Genre)ucAddFilm.cmbGenre.SelectedItem,
-                    ImageUrl = ucAddFilm.txtImageUrl.Text,
-                    Title = ucAddFilm.txtTitle.Text,
-                    Quantity = (int)ucAddFilm.numUDQuantity.Value,
-                    Actors = new List<Actor>(assignedActors),
-                    PricePerDay = GuiHelper.GetDoubleValue(ucAddFilm.txtPrizePerDay.Text)
-                };
-                Response response = Communication.Instance.AddFilm(film);
-                if(response.Exception == null)
-                {
-                    if(MessageBox.Show("Film saved successfully", "Film saved", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK){
-                        ucAddFilm.txtTitle.Text = string.Empty;
-                        ucAddFilm.txtImageUrl.Text = string.Empty;
-                        ucAddFilm.txtPrizePerDay.Text = string.Empty;
-                        ucAddFilm.numUDQuantity.Value = 0;
-                        ucAddFilm.cmbGenre.SelectedIndex = -1;
-                        assignedActors.Clear();
-                        GetFilms("");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Film save failed", "Film saved", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Add film error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("All fields are required or check values in fields", "Parameters error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(errorMessage, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion

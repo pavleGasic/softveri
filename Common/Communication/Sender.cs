@@ -21,6 +21,11 @@ namespace Common.Communication
             _stream = new NetworkStream(socket);
         }
 
+        public void Close()
+        {
+            _stream.Close();
+        }
+
         public void Send(object argument)
         {
             _formatter.Serialize(_stream, argument);

@@ -58,6 +58,7 @@
     <Compile Include="ServerLogic.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="SystemOperation\ActorSO\AddActorSO.cs" />
     <Compile Include="SystemOperation\CustomerSO\AddCustomerSO.cs" />
     <Compile Include="SystemOperation\Exceptions\ActorException.cs" />

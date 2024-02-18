@@ -32,18 +32,18 @@ namespace Server
             return (Worker)so.Result;
         }
 
-        public int Register(Worker worker)
+        public Worker Register(Worker worker)
         {
             RegisterSO so = new RegisterSO();
             so.ExecuteTemplate(worker);
-            return ((Worker)so.Result).WorkerId;
+            return (Worker)so.Result;
         }
 
-        internal int AddCustomer(Customer customer)
+        internal Customer AddCustomer(Customer customer)
         {
             AddCustomerSO so = new AddCustomerSO();
             so.ExecuteTemplate(customer);
-            return ((Customer)so.Result).CustomerId;
+            return (Customer)so.Result;
         }
 
         internal List<Customer> GetCustomers(Customer customer)
@@ -53,18 +53,18 @@ namespace Server
             return (List<Customer>)so.Result;
         }
 
-        internal int UpdateCustomer(Customer customer)
+        internal Customer UpdateCustomer(Customer customer)
         {
             UpdateCustomerSO so = new UpdateCustomerSO();
             so.ExecuteTemplate(customer);
-            return ((Customer)so.Result).CustomerId;
+            return (Customer)so.Result;
         }
 
-        internal int AddActor(Actor actor)
+        internal Actor AddActor(Actor actor)
         {
             AddActorSO so = new AddActorSO();
             so.ExecuteTemplate(actor);
-            return ((Actor)so.Result).ActorId;
+            return (Actor)so.Result;
         }
 
         internal List<Genre> GetGenres()
@@ -81,11 +81,11 @@ namespace Server
             return (List<Actor>)so.Result;
         }
 
-        internal int AddFilm(Film film)
+        internal Film AddFilm(Film film)
         {
             AddFilmSO so = new AddFilmSO();
             so.ExecuteTemplate(film);
-            return ((Film)so.Result).FilmId;
+            return (Film)so.Result;
         }
 
         internal List<Film> GetFilms(Film film)
@@ -95,18 +95,18 @@ namespace Server
             return (List<Film>)so.Result;
         }
 
-        internal int DeleteFilm(Film film)
+        internal Film DeleteFilm(Film film)
         {
             DeleteFilmSO so = new DeleteFilmSO();
             so.ExecuteTemplate(film);
-            return ((Film)so.Result).FilmId;
+            return (Film)so.Result;
         }
 
-        internal int AddReservation(Reservation reservation)
+        internal Reservation AddReservation(Reservation reservation)
         {
             AddReservation so = new AddReservation(); 
             so.ExecuteTemplate(reservation);
-            return ((Reservation)so.Result).ReservationId;
+            return (Reservation)so.Result;
         }
 
         internal List<Reservation> GetReservations(Reservation reservation)
@@ -116,11 +116,11 @@ namespace Server
             return (List<Reservation>)so.Result;
         }
 
-        internal int UpdateReservationStatus(Reservation reservation)
+        internal Reservation UpdateReservationStatus(Reservation reservation)
         {
             UpdateReservationStatusSO so = new UpdateReservationStatusSO();
             so.ExecuteTemplate(reservation);
-            return ((Reservation)so.Result).ReservationId;
+            return (Reservation)so.Result;
         }
 
         internal Reservation DeleteReservation(Reservation reservation)

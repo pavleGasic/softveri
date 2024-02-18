@@ -20,6 +20,12 @@ namespace Common.Communication
             _formatter = new BinaryFormatter();
             _stream = new NetworkStream(sokcet);
         }
+
+        public void Close()
+        {
+            _stream.Close();
+        }
+
         public object Receive()
         {
             return _formatter.Deserialize(_stream);

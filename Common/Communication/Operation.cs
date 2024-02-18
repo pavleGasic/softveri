@@ -22,6 +22,7 @@ namespace Common.Communication
         AddReservation,
         GetReservations,
         UpdateReservationStatus,
-        DeleteReservation
+        DeleteReservation,
+        Logout
     }
 }

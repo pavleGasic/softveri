@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication.cs" />
+    <Compile Include="ClientCommunication\ClientController.cs" />
+    <Compile Include="ClientCommunication\Communication.cs" />
+    <Compile Include="ClientCommunication\CommunicationUtils.cs" />
     <Compile Include="FrmBigDialog.cs">
       <SubType>Form</SubType>
     </Compile>

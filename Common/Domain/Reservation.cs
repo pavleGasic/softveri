@@ -23,7 +23,7 @@ namespace Common.Domain
         public ReservationStatus ReservationStatus { get; set; }
         [IncludeInParameters("Insert,Update")]
         [Browsable(false)]
-        public String Status => ReservationStatus.ToString();
+        public string Status => ReservationStatus.ToString();
         public Worker Worker { get; set; }
         [IncludeInParameters("Select,Insert")]
         [Browsable(false)]

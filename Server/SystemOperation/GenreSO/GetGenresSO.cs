@@ -13,8 +13,15 @@ namespace Server.SystemOperation
     {
         protected override void ExecuteConcreteOperation(IEntity entity)
         {
-            Genre genre = (Genre)entity;
-            Result = genericRepository.GetAll(genre).Cast<Genre>().ToList();
+            try
+            {
+                Genre genre = (Genre)entity;
+                Result = genericRepository.GetAll(genre).Cast<Genre>().ToList();
+            }
+            catch
+            {
+                throw new Exception("System cannot get genres!");
+            }
         }
     }
 }

@@ -9,7 +9,8 @@ namespace Common.Communication
     [Serializable]
     public class Response
     {
-        public object Result {  get; set; } 
+        public object Result {  get; set; }
+        public string Message { get; set; }
         public Exception Exception { get; set; }
     }
 }

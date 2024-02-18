@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -43,18 +44,15 @@ namespace Client.GuiController.ReservationControllers
 
         private void BtnSaveReservation_Click(object sender, EventArgs e)
         {
-            Response response = Communication.Instance.AddReservation(reservation);
-            if(response.Exception == null && (int)response.Result != -1)
+            try
             {
-                if(MessageBox.Show("Reservation saved successfully", "Save success", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                {
-                    ReservationGuiController.Instance.refreshReservation = true;
-                    frmDialog.Close();
-                }
+                Reservation response = Communication.Instance.AddReservation(reservation);
+                ReservationGuiController.Instance.refreshReservation = true;
+                frmDialog.Close();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Failed to save reservation", "Save failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Add reservation error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

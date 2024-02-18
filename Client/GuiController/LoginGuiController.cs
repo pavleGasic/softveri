@@ -1,4 +1,5 @@
-﻿using Client.UserControls;
+﻿using Client.ClientCommunication;
+using Client.UserControls;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -28,57 +29,6 @@ namespace Client.GuiController
 
         private FrmLogin frmLogin;
 
-        #region Initialize mouse capture
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
-        #endregion 
-
-        #region Handle top window control
-        private void HandleControlEvents()
-        {
-            frmLogin.ucWindowTop1.CloseButtonClicked += WindowTopControl_CloseClicked;
-            frmLogin.ucWindowTop1.MinimizeButtonClicked += WindowTopControl_MinimizeClicked;
-            frmLogin.ucWindowTop1.PanelMouseDown += WindowTopControl_PanelMouseDown;
-            frmLogin.ucLogin1.ButtonClicked += LoginControl_ButtonClicked;
-            frmLogin.ucLogin1.LinkClicked += LoginControl_LinkClicked;
-            frmLogin.ucRegister1.ButtonClicked += RegisterControl_ButtonClicked;
-            frmLogin.ucRegister1.LinkClicked += RegisterControl_LinkClicked;
-        }
-
-        private void WindowTopControl_MinimizeClicked(object sender, EventArgs e)
-        {
-            frmLogin.WindowState = FormWindowState.Minimized;
-        }
-
-        private void WindowTopControl_CloseClicked(object sender, EventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
-        private void WindowTopControl_PanelDoubleClicked(object sender, EventArgs e)
-        {
-            if (frmLogin.WindowState == FormWindowState.Maximized)
-            {
-                frmLogin.WindowState = FormWindowState.Normal;
-            }
-            else
-            {
-                frmLogin.WindowState = FormWindowState.Maximized;
-            }
-        }
-
-        private void WindowTopControl_PanelMouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(frmLogin.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-        #endregion
-
         #region Handle navigation
         private void LoginControl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -101,11 +51,19 @@ namespace Client.GuiController
 
         internal void ShowLoginForm()
         {
-            Communication.Instance.Connect();
             frmLogin = new FrmLogin();
             HandleControlEvents();
             Application.Run(frmLogin);
         }
+
+        private void HandleControlEvents()
+        {
+            frmLogin.ucLogin1.ButtonClicked += LoginControl_ButtonClicked;
+            frmLogin.ucLogin1.LinkClicked += LoginControl_LinkClicked;
+            frmLogin.ucRegister1.ButtonClicked += RegisterControl_ButtonClicked;
+            frmLogin.ucRegister1.LinkClicked += RegisterControl_LinkClicked;
+        }
+
         internal void FromMakeVisible()
         {
             frmLogin.ucLogin1.txtPassword.Text = string.Empty;
@@ -129,14 +87,15 @@ namespace Client.GuiController
                 Username = frmLogin.ucLogin1.txtUsername.Text,
                 Password = frmLogin.ucLogin1.txtPassword.Text
             };
-            Response response = Communication.Instance.Login(worker);
-            if (response.Exception == null)
+            try
             {
-                HandleGoToDashboard((Worker)response.Result);
+                Communication.Instance.Connect();
+                Worker response = Communication.Instance.Login(worker);
+                HandleGoToDashboard(response);
             }
-            else
+            catch (Exception ex)
             {
-                frmLogin.ucLogin1.lblErrorLogin.Text = "Invalid username or password";
+                MessageBox.Show(ex.Message, "Login error!", MessageBoxButtons.OK, MessageBoxIcon.Error);    
             }
         }
 
@@ -150,20 +109,24 @@ namespace Client.GuiController
                 Password = frmLogin.ucRegister1.txtPassword.Text,
                 Username = frmLogin.ucRegister1.txtUsername.Text
             };
-            Response response = Communication.Instance.Register(worker);
-            if (response.Exception == null)
+
+            try
             {
+                Communication.Instance.Connect();
+                Worker response = Communication.Instance.Register(worker);
                 Worker w = new Worker()
                 {
-                    FirstName = worker.FirstName, LastName = worker.LastName,
-                    Password = worker.Password, Username = worker.Username,
-                    WorkerId = (int)response.Result
+                    FirstName = worker.FirstName,
+                    LastName = worker.LastName,
+                    Password = worker.Password,
+                    Username = worker.Username,
+                    WorkerId = response.WorkerId
                 };
                 HandleGoToDashboard(w);
             }
-            else
+            catch (Exception ex)
             {
-                frmLogin.ucRegister1.lblErrorRegister.Text = "Register failed";
+                MessageBox.Show(ex.Message, "Login error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -177,23 +140,24 @@ namespace Client.GuiController
         #region Input validation
         public bool ValidateRegister()
         {
+            string errorMessage = string.Empty;
+            if (!GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtPassword.Text) ||
+                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtUsername.Text) ||
+                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtFirstname.Text) ||
+                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtLastname.Text))
+            {
+                errorMessage += "Every field is required!\n";
+            }
             if (!GuiHelper.IsPasswordValid(frmLogin.ucRegister1.txtPassword.Text))
             {
-                frmLogin.ucRegister1.lblErrorRegister.Text = "Pass must contain 1 capital letter and number";
-                return false;
+                errorMessage += "Password must contain at least one capital letter and one number!\n";
             }
-            else
+            if(errorMessage ==  string.Empty)
             {
-                if(!GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtPassword.Text) ||
-                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtUsername.Text) ||
-                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtFirstname.Text)||
-                    !GuiHelper.IsTextBoxValid(frmLogin.ucRegister1.txtLastname.Text))
-                {
-                    frmLogin.ucRegister1.lblErrorRegister.Text = "Every field is required";
-                    return false;
-                }
+                return true;
             }
-            return true;
+            MessageBox.Show(errorMessage, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
         }
 
         public bool ValidateLogin()
@@ -201,6 +165,7 @@ namespace Client.GuiController
             if (!GuiHelper.IsTextBoxValid(frmLogin.ucLogin1.txtPassword.Text) ||
                     !GuiHelper.IsTextBoxValid(frmLogin.ucLogin1.txtUsername.Text))
             {
+                MessageBox.Show("Every field is required", "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 frmLogin.ucLogin1.lblErrorLogin.Text = "Every field is required";
                 return false;
             }

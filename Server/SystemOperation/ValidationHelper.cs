@@ -19,7 +19,7 @@ namespace Server.SystemOperation
                 Regex regex = new Regex(pattern);
                 if (!regex.IsMatch(worker.Password))
                 {
-                    throw new WorkerException("Pass must contain 1 capital letter and number");
+                    throw new WorkerException("Password must contain at least one capital letter and one number.");
                 }
                 else
                 {
@@ -72,8 +72,8 @@ namespace Server.SystemOperation
         internal static void ValidateFilm(Film film)
         {
             if (film != null)
-            {
-                if (string.IsNullOrEmpty(film.Title) || film.Genre == null)
+            { 
+                if (string.IsNullOrEmpty(film.Title) || film.Genre == null || film.Actors.Count == 0 || film.PricePerDay == -1)
                 {
                     throw new FilmException("Every property must be non null or empty");
                 }
